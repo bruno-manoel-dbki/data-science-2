@@ -11,7 +11,7 @@
 
 # ## _Setup_ geral
 
-# In[1]:
+# In[8]:
 
 
 import pandas as pd
@@ -21,26 +21,37 @@ import scipy.stats as sct
 import seaborn as sns
 
 
-# In[2]:
+# In[27]:
 
 
-get_ipython().run_line_magic('matplotlib', 'inline')
 
 from IPython.core.pylabtools import figsize
+from IPython import get_ipython
 
+# %matplotlib inline
 
 figsize(12, 8)
 
 sns.set()
 
+    
+#%matplotlib inline
 
-# In[3]:
+#from IPython.core.pylabtools import figsize
+
+
+#figsize(12, 8)
+
+#sns.set()
+
+
+# In[10]:
 
 
 athletes = pd.read_csv("athletes.csv")
 
 
-# In[4]:
+# In[11]:
 
 
 def get_sample(df, col_name, n=100, seed=42):
@@ -76,10 +87,15 @@ def get_sample(df, col_name, n=100, seed=42):
 
 # ## Inicia sua análise a partir daqui
 
-# In[5]:
+# In[26]:
 
 
 # Sua análise começa aqui.
+ath_sample = get_sample(athletes,"height",3000)
+sct.shapiro(ath_sample)
+
+#plt.hist(ath_sample, bins=25)
+sct.jarque_bera(ath_sample)
 
 
 # ## Questão 1
@@ -90,6 +106,7 @@ def get_sample(df, col_name, n=100, seed=42):
 
 
 def q1():
+    return False
     # Retorne aqui o resultado da questão 1.
     pass
 
@@ -108,6 +125,7 @@ def q1():
 
 
 def q2():
+    return False
     # Retorne aqui o resultado da questão 2.
     pass
 
