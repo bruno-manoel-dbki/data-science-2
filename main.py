@@ -87,15 +87,42 @@ def get_sample(df, col_name, n=100, seed=42):
 
 # ## Inicia sua análise a partir daqui
 
-# In[26]:
+# In[51]:
 
 
 # Sua análise começa aqui.
 ath_sample = get_sample(athletes,"height",3000)
-sct.shapiro(ath_sample)
-
+#import statsmodels.api as sm
 #plt.hist(ath_sample, bins=25)
-sct.jarque_bera(ath_sample)
+sct.shapiro(ath_sample)[1]>0.05 and sct.jarque_bera(ath_sample)[1]>0.05
+
+
+
+
+# In[53]:
+
+
+wei_sample = get_sample(athletes, 'weight', 3000)
+sct.normaltest(wei_sample)[1]>0.05
+#sm.qqplot(wei_sample, fit=True, line="45")
+
+
+# In[54]:
+
+
+plt.hist(wei_sample, bins=25)
+
+
+# In[ ]:
+
+
+
+
+
+# In[66]:
+
+
+
 
 
 # ## Questão 1
@@ -106,7 +133,7 @@ sct.jarque_bera(ath_sample)
 
 
 def q1():
-    return False
+    return sct.shapiro(ath_sample)[1]>0.05 
     # Retorne aqui o resultado da questão 1.
     pass
 
@@ -125,7 +152,7 @@ def q1():
 
 
 def q2():
-    return False
+    return sct.jarque_bera(ath_sample)[1]>0.05
     # Retorne aqui o resultado da questão 2.
     pass
 
@@ -142,6 +169,7 @@ def q2():
 
 
 def q3():
+    return sct.normaltest(wei_sample)[1]>0.05
     # Retorne aqui o resultado da questão 3.
     pass
 
@@ -155,10 +183,14 @@ def q3():
 # 
 # Realize uma transformação logarítmica em na amostra de `weight` da questão 3 e repita o mesmo procedimento. Podemos afirmar a normalidade da variável transformada ao nível de significância de 5%? Responda com um boolean (`True` ou `False`).
 
-# In[9]:
+# In[67]:
 
 
 def q4():
+    w = np.log(wei_sample)
+    return sct.normaltest(w)[1]>0.05
+    
+        
     # Retorne aqui o resultado da questão 4.
     pass
 
@@ -174,10 +206,29 @@ def q4():
 # 
 # Obtenha todos atletas brasileiros, norte-americanos e canadenses em `DataFrame`s chamados `bra`, `usa` e `can`,respectivamente. Realize um teste de hipóteses para comparação das médias das alturas (`height`) para amostras independentes e variâncias diferentes com a função `scipy.stats.ttest_ind()` entre `bra` e `usa`. Podemos afirmar que as médias são estatisticamente iguais? Responda com um boolean (`True` ou `False`).
 
-# In[10]:
+# In[69]:
+
+
+athletes.head()
+
+
+# In[136]:
+
+
+mask1 = athletes.nationality== "BRA" 
+mask2 = athletes.nationality== "USA" 
+mask3 = athletes.nationality== "CAN" 
+ath_bra = athletes[mask1]
+ath_usa = athletes[mask2] 
+ath_can = athletes[mask3]
+sct.ttest_ind(ath_bra.height.dropna(),ath_usa.height.dropna())
+
+
+# In[133]:
 
 
 def q5():
+    return sct.ttest_ind(ath_bra.height.dropna(),ath_usa.height.dropna())[1]>0.05
     # Retorne aqui o resultado da questão 5.
     pass
 
@@ -186,10 +237,11 @@ def q5():
 # 
 # Repita o procedimento da questão 5, mas agora entre as alturas de `bra` e `can`. Podemos afimar agora que as médias são estatisticamente iguais? Reponda com um boolean (`True` ou `False`).
 
-# In[11]:
+# In[134]:
 
 
 def q6():
+    return sct.ttest_ind(ath_bra.height.dropna(),ath_can.height.dropna())[1]>0.05
     # Retorne aqui o resultado da questão 6.
     pass
 
@@ -198,10 +250,17 @@ def q6():
 # 
 # Repita o procedimento da questão 6, mas agora entre as alturas de `usa` e `can`. Qual o valor do p-valor retornado? Responda como um único escalar arredondado para oito casas decimais.
 
-# In[12]:
+# In[141]:
+
+
+round(sct.ttest_ind(ath_usa.height.dropna(),ath_can.height.dropna(),equal_var= False)[1],8)
+
+
+# In[137]:
 
 
 def q7():
+    return round(sct.ttest_ind(ath_usa.height.dropna(),ath_can.height.dropna(),equal_var= False)[1],8)
     # Retorne aqui o resultado da questão 7.
     pass
 
